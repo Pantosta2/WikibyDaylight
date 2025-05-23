@@ -1,32 +1,31 @@
 import { GeneralNav } from "../layouts/GeneralNav";
 import { DefinedImages } from "../assets/DefinedImages";
-import PortraitCharacterList from "../components/PortraitCharacterList";
-import { getKillers } from "../services/GeneralGetService";
+import DisplayCharacterData from "../components/DisplayCharacterData";
 
 export default function KillersPage() {
   return (
-    <>
+    <div className="absolute h-screen w-full overflow-x-hidden">
       <div
-        className="bg-cover bg-center h-screen w-full"
+        className="absolute inset-0 bg-cover bg-center z-10"
         style={{
           backgroundImage: `url(${DefinedImages.GardenOfJoy})`,
+          zIndex: 0,
+          backgroundAttachment: "absolute",
         }}
       >
+        <img
+          src={DefinedImages.Fog}
+          alt="Niebla"
+          className="absolute -bottom-40 w-full scale-180 z-10"
+        />
+        <img
+          src={DefinedImages.Fog}
+          alt="Niebla"
+          className="absolute -bottom-40 w-full scale-180 z-10"
+        />
         <GeneralNav />
-        <img
-          src={DefinedImages.Fog}
-          alt=""
-          className="absolute pt-[46rem] w-screen scale-x-200"
-        />
-        <img
-          src={DefinedImages.Fog}
-          alt=""
-          className="absolute pt-[46rem] w-screen scale-x-200"
-        />
-        <main className="flex">
-          <PortraitCharacterList fetchFunction={getKillers} />
-        </main>
+        <DisplayCharacterData />
       </div>
-    </>
+    </div>
   );
 }

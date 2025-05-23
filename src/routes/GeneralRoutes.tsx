@@ -11,23 +11,25 @@ export const GeneralRoutes = createBrowserRouter([
     path: "/",
     element: <MainPage />,
     errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "/SurvivorsInfo",
-        element: <SurvivorsPage />,
-      },
-      {
-        path: "/KillersInfo",
-        element: <KillersPage />,
-      },
-      {
-        path: "/Overview",
-        element: <OverviewPage />,
-      },
-      {
-        path: "/Make-your-own-build",
-        element: <MakeYourOwnBuildPage />,
-      },
-    ],
+  },
+  {
+    path: "/SurvivorsInfo",
+    element: <SurvivorsPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/KillersInfo",
+    element: <KillersPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/Overview",
+    element: <OverviewPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/Make-your-own-build",
+    element: <MakeYourOwnBuildPage />,
+    errorElement: <ErrorPage />,
   },
 ]);

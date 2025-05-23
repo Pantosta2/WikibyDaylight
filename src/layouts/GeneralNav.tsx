@@ -6,8 +6,8 @@ import "./GeneralNav.css";
 export const GeneralNav = () => {
   return (
     <>
-      <nav className="z-1 w-screen general-scrollbar font-bold">
-        <ul className="absolute flex flex-row items-center justify-center p-2 w-full">
+      <nav className="absolute w-screen general-scrollbar font-bold ">
+        <ul className="flex flex-row items-center justify-center p-2 w-full">
           <li className="flex flex-4">
             <Link to="/">
               <img
@@ -46,7 +46,9 @@ export const GeneralNav = () => {
           </li>
         </ul>
       </nav>
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
     </>
   );
 };

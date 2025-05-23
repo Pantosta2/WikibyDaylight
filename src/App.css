@@ -1,4 +1,4 @@
 html {
+    overflow-x: hidden;
     background-color: rgb(82, 82, 82);
-    overflow: visible;
 }
