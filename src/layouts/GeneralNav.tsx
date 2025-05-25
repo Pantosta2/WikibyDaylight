@@ -19,12 +19,6 @@ export const GeneralNav = () => {
           </li>
           <li
             className="flex items-center justify-center px-[2rem]"
-            aria-label="Overview - General information of the game"
-          >
-            <NavButton PathUrl="/Overview" ButtonName="Overview" />
-          </li>
-          <li
-            className="flex items-center justify-center px-[2rem]"
             aria-label="Survivors - Information of the survivors"
           >
             <NavButton PathUrl="/SurvivorsInfo" ButtonName="Survivors" />

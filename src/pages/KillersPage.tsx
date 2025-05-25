@@ -1,6 +1,7 @@
 import { GeneralNav } from "../layouts/GeneralNav";
 import { DefinedImages } from "../assets/DefinedImages";
 import DisplayCharacterData from "../components/DisplayCharacterData";
+import { getKillers } from "../services/GeneralGetService";
 
 export default function KillersPage() {
   return (
@@ -9,22 +10,18 @@ export default function KillersPage() {
         className="absolute inset-0 bg-cover bg-center z-10"
         style={{
           backgroundImage: `url(${DefinedImages.GardenOfJoy})`,
-          zIndex: 0,
-          backgroundAttachment: "absolute",
         }}
       >
         <img
           src={DefinedImages.Fog}
           alt="Niebla"
-          className="absolute -bottom-40 w-full scale-180 z-10"
-        />
-        <img
-          src={DefinedImages.Fog}
-          alt="Niebla"
-          className="absolute -bottom-40 w-full scale-180 z-10"
+          className="absolute -bottom-40 w-full scale-160 z-10"
         />
         <GeneralNav />
-        <DisplayCharacterData />
+        <DisplayCharacterData
+          fetchFunction={getKillers}
+          characterRole="killer"
+        />
       </div>
     </div>
   );
