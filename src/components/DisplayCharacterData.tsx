@@ -1,18 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { AxiosResponse } from "axios";
 import PortraitCharacterList from "./PortraitCharacterList";
-import type {
-  CharacterApiData,
-  CharacterListResponse,
+import {
+  getCharacterPerks,
+  type CharacterProfileData,
+  type CharacterListEnvelope,
+  type Perk,
 } from "../services/GeneralGetService";
-import type {
-  KillerApiData,
-  SurvivorApiData,
-  Perk,
-} from "../Types/GeneralTypes";
+import type { KillerApiData, SurvivorApiData } from "../Types/GeneralTypes";
 
 type DisplayCharacterDataProps = {
-  fetchFunction: () => Promise<AxiosResponse<CharacterListResponse>>;
+  fetchFunction: () => Promise<AxiosResponse<CharacterListEnvelope>>;
   characterRole: "killer" | "survivor";
 };
 export default function DisplayCharacterData({
@@ -21,9 +19,53 @@ export default function DisplayCharacterData({
 }: DisplayCharacterDataProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCharacter, setSelectedCharacter] =
-    useState<CharacterApiData | null>(null);
+    useState<CharacterProfileData | null>(null);
+  const [specificPerks, setSpecificPerks] = useState<Perk[]>([]);
+  const [isLoadingPerks, setIsLoadingPerks] = useState<boolean>(false);
+  const [errorPerks, setErrorPerks] = useState<string | null>(null);
 
-  const handlePortraitClick = (character: CharacterApiData) => {
+  useEffect(() => {
+    if (selectedCharacter && selectedCharacter.code && isModalOpen) {
+      const fetchPerksForCharacter = async () => {
+        setIsLoadingPerks(true);
+        setErrorPerks(null);
+        setSpecificPerks([]);
+
+        try {
+          const response = await getCharacterPerks(
+            characterRole,
+            selectedCharacter.code
+          );
+
+          if (Array.isArray(response.data)) {
+            setSpecificPerks(response.data);
+          } else if (
+            response.data &&
+            Array.isArray((response.data as any).data)
+          ) {
+            setSpecificPerks((response.data as any).data);
+          } else {
+            setErrorPerks("Formato de perks inesperado.");
+            setSpecificPerks([]);
+          }
+        } catch (err) {
+          console.error(
+            `EFFECT: Error fetching perks for ${selectedCharacter.name}:`,
+            err
+          );
+          setErrorPerks(
+            `No se pudieron cargar los perks para ${selectedCharacter.name}.`
+          );
+          setSpecificPerks([]);
+        } finally {
+          setIsLoadingPerks(false);
+        }
+      };
+      fetchPerksForCharacter();
+    }
+  }, [selectedCharacter, isModalOpen, characterRole]);
+
+  const handlePortraitClick = (character: CharacterProfileData) => {
     setIsModalOpen(true);
     setSelectedCharacter(character);
   };
@@ -31,31 +73,45 @@ export default function DisplayCharacterData({
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedCharacter(null);
+    setSpecificPerks([]);
   };
 
   const renderPerks = (perks: Perk[]) => {
+    if (isLoadingPerks)
+      return <p className="text-sm text-gray-600 my-4">Loading perks...</p>;
+    if (errorPerks)
+      return <p className="text-sm text-red-500 my-4">{errorPerks}</p>;
     if (!perks || perks.length === 0) {
       return <p className="text-sm text-gray-600">No perks listed</p>;
     }
     return (
-      <div>
+      <>
         <h4 className="text-lg font-semibold mt-3 mb-1 text-gray-800">
           Perks:
         </h4>
-        <ul className="list-none pl-0 space-y-1">
-          {perks.map((perk) => (
+        <ul className="space-y-3">
+          {perks.map((perk, index) => (
             <li
-              key={perk.perk_id || perk.perk_name}
-              className="text-sm text-gray-700"
+              key={perk.name || `perk-${index}`}
+              className="p-2 border rounded-md shadow-sm"
             >
-              <strong>{perk.perk_name}</strong>
+              <div className="flex items-center mb-1">
+                {perk.icon && (
+                  <img
+                    src={perk.icon}
+                    alt={perk.name}
+                    className="w-10 h-10 mr-3 border object-contain"
+                  />
+                )}
+                <strong className="text-md text-gray-700">{perk.name}</strong>
+              </div>
+              <p className="text-xs text-gray-600">{perk.description}</p>
             </li>
           ))}
         </ul>
-      </div>
+      </>
     );
   };
-
   return (
     <>
       <PortraitCharacterList
@@ -131,7 +187,7 @@ export default function DisplayCharacterData({
               </div>
             )}
 
-          {renderPerks(selectedCharacter.perks)}
+          {renderPerks(specificPerks)}
 
           <button
             onClick={handleCloseModal}

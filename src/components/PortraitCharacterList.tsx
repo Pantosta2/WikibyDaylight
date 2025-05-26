@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import type { AxiosResponse } from "axios";
 import type {
-  CharacterApiData,
-  CharacterListResponse,
+  CharacterProfileData,
+  CharacterListEnvelope,
 } from "../services/GeneralGetService";
 
 type PortraitListProps = {
-  fetchFunction: () => Promise<AxiosResponse<CharacterListResponse>>;
-  onButtonClick: (caharacterData: CharacterApiData) => void;
+  fetchFunction: () => Promise<AxiosResponse<CharacterListEnvelope>>;
+  onButtonClick: (characterData: CharacterProfileData) => void;
 };
 
 export default function PortraitCharacterList({
   fetchFunction,
   onButtonClick,
 }: PortraitListProps) {
-  const [characters, setCharacters] = useState<CharacterApiData[]>([]);
+  const [characters, setCharacters] = useState<CharacterProfileData[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

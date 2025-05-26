@@ -1,16 +1,15 @@
 export type Perk = {
-  perk_name: string;
-  perk_id: string;
+  name: string;
   description: string;
   icon: string;     
 };
 
 type BaseCharacter = {
   number: number;
+  code: string;
   name: string; 
   overview: string;
   backstory: string;
-  perks: Perk[];
   dlc: string;
   imgs: {
     portrait: string;
@@ -34,3 +33,15 @@ export type SurvivorApiData = BaseCharacter & {
   gender: string;
   nationality?: string;
 };
+
+export type KillerProfileData = Omit<KillerApiData, 'KillerPerks'>;
+
+export type SurvivorProfileData = Omit<SurvivorApiData, 'SurvivorPerks'>;
+
+export type CharacterProfileData = KillerProfileData | SurvivorProfileData;
+
+export type CharacterListEnvelope = {
+  data: CharacterProfileData[];
+};
+
+export type CharacterSpecificPerksResponse = Perk[];

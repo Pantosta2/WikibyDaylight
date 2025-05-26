@@ -17,6 +17,11 @@ export default function KillersPage() {
           alt="Niebla"
           className="absolute -bottom-40 w-full scale-160 z-10"
         />
+        <img
+          src={DefinedImages.Fog}
+          alt="Niebla"
+          className="absolute -bottom-40 w-full scale-160 z-10"
+        />
         <GeneralNav />
         <DisplayCharacterData
           fetchFunction={getKillers}
