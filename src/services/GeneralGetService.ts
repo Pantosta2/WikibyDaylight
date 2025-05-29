@@ -3,6 +3,7 @@ import axios from "axios";
 import type {
   CharacterListEnvelope,
   Perk,               
+  PowerDetails,
   CharacterSpecificPerksResponse,
   CharacterProfileData
 } from "../Types/GeneralTypes";
@@ -22,6 +23,12 @@ const getSurvivors = async (): Promise<
 const getCharacterPerks = (role: "killer" | "survivor", characterCode: string): Promise<AxiosResponse<CharacterSpecificPerksResponse>> =>{
   return axios.get<CharacterSpecificPerksResponse>(`${Url}/${role}/${characterCode}/perk`)};
 
-export { getKillers, getSurvivors, getCharacterPerks };
+const getKillerPowerDetails = (
+  characterCode: string
+): Promise<AxiosResponse<PowerDetails>> => {
+  return axios.get<PowerDetails>(`${Url}/killer/${characterCode}/power`);
+};
 
-export type { CharacterProfileData, Perk, CharacterListEnvelope}
+export { getKillers, getSurvivors, getCharacterPerks, getKillerPowerDetails };
+
+export type { CharacterProfileData, Perk, CharacterListEnvelope, PowerDetails}

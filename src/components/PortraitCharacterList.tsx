@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import type { AxiosResponse } from "axios";
 import type {
   CharacterProfileData,
   CharacterListEnvelope,
 } from "../services/GeneralGetService";
+import { useCharacterList } from "../hooks/useCharacterList";
 
 type PortraitListProps = {
   fetchFunction: () => Promise<AxiosResponse<CharacterListEnvelope>>;
@@ -14,26 +14,23 @@ export default function PortraitCharacterList({
   fetchFunction,
   onButtonClick,
 }: PortraitListProps) {
-  const [characters, setCharacters] = useState<CharacterProfileData[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { characters, errorList, isLoadingList } =
+    useCharacterList(fetchFunction);
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setError(null);
-        const response = await fetchFunction();
-        setCharacters(response.data.data || []);
-      } catch (err) {
-        console.error("Error fetching character list", err);
-        setError("Failed to load characters");
-        setCharacters([]);
-      }
-    };
-    loadData();
-  }, [fetchFunction]);
+  if (isLoadingList) {
+    return (
+      <p className="text-blue-500 text-center mt-10">Loading characters...</p>
+    );
+  }
 
-  if (error) {
-    return <p className="text-red-500 text-center mt-10">{error}</p>;
+  if (errorList) {
+    return <p className="text-red-500 text-center mt-10">{errorList}</p>;
+  }
+
+  if (!characters || characters.length === 0) {
+    return (
+      <p className="text-gray-500 text-center mt-10">No characters found.</p>
+    );
   }
 
   return (

@@ -4,12 +4,19 @@ export type Perk = {
   icon: string;     
 };
 
+export type PowerDetails = {
+  powerName: string;
+  killerCode: string;
+  description: string;
+};
+
 type BaseCharacter = {
   number: number;
   code: string;
   name: string; 
   overview: string;
   backstory: string;
+  nationality: string;
   dlc: string;
   imgs: {
     portrait: string;
@@ -18,27 +25,22 @@ type BaseCharacter = {
 
 export type KillerApiData = BaseCharacter & {
   role: 'killer'; 
-  fullname: string; 
+  fullName: string; 
+  gender: string;
   difficulty: string;
   moveSpeed: number | string;
   terrorRadius: number | string; 
-  power: {
-    name: string;
-    description: string;
-  };
+  powerName: string;
+  powerCode: string;
 };
 
 export type SurvivorApiData = BaseCharacter & {
   role: "survivor";
-  gender: string;
-  nationality?: string;
+  nationality: string;
+
 };
 
-export type KillerProfileData = Omit<KillerApiData, 'KillerPerks'>;
-
-export type SurvivorProfileData = Omit<SurvivorApiData, 'SurvivorPerks'>;
-
-export type CharacterProfileData = KillerProfileData | SurvivorProfileData;
+export type CharacterProfileData = KillerApiData | SurvivorApiData;
 
 export type CharacterListEnvelope = {
   data: CharacterProfileData[];

@@ -40,9 +40,7 @@ export const GeneralNav = () => {
           </li>
         </ul>
       </nav>
-      <main>
-        <Outlet />
-      </main>
+      <Outlet />
     </>
   );
 };

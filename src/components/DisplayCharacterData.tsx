@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
 import type { AxiosResponse } from "axios";
 import PortraitCharacterList from "./PortraitCharacterList";
-import {
-  getCharacterPerks,
-  type CharacterProfileData,
-  type CharacterListEnvelope,
-  type Perk,
+import { useModal } from "../hooks/useModal";
+import { useCharacterPerks } from "../hooks/useCharacterPerks";
+import PerkDisplayList from "./PerkDisplayList";
+import type {
+  CharacterProfileData,
+  CharacterListEnvelope,
 } from "../services/GeneralGetService";
 import type { KillerApiData, SurvivorApiData } from "../Types/GeneralTypes";
 
@@ -13,105 +13,32 @@ type DisplayCharacterDataProps = {
   fetchFunction: () => Promise<AxiosResponse<CharacterListEnvelope>>;
   characterRole: "killer" | "survivor";
 };
+
 export default function DisplayCharacterData({
   fetchFunction,
   characterRole,
 }: DisplayCharacterDataProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] =
-    useState<CharacterProfileData | null>(null);
-  const [specificPerks, setSpecificPerks] = useState<Perk[]>([]);
-  const [isLoadingPerks, setIsLoadingPerks] = useState<boolean>(false);
-  const [errorPerks, setErrorPerks] = useState<string | null>(null);
+  const {
+    isModalOpen,
+    selectedItem: selectedCharacter,
+    openModal: openCharacterModal,
+    closeModal: closeCharacterModal,
+  } = useModal<CharacterProfileData>();
 
-  useEffect(() => {
-    if (selectedCharacter && selectedCharacter.code && isModalOpen) {
-      const fetchPerksForCharacter = async () => {
-        setIsLoadingPerks(true);
-        setErrorPerks(null);
-        setSpecificPerks([]);
-
-        try {
-          const response = await getCharacterPerks(
-            characterRole,
-            selectedCharacter.code
-          );
-
-          if (Array.isArray(response.data)) {
-            setSpecificPerks(response.data);
-          } else if (
-            response.data &&
-            Array.isArray((response.data as any).data)
-          ) {
-            setSpecificPerks((response.data as any).data);
-          } else {
-            setErrorPerks("Formato de perks inesperado.");
-            setSpecificPerks([]);
-          }
-        } catch (err) {
-          console.error(
-            `EFFECT: Error fetching perks for ${selectedCharacter.name}:`,
-            err
-          );
-          setErrorPerks(
-            `No se pudieron cargar los perks para ${selectedCharacter.name}.`
-          );
-          setSpecificPerks([]);
-        } finally {
-          setIsLoadingPerks(false);
-        }
-      };
-      fetchPerksForCharacter();
-    }
-  }, [selectedCharacter, isModalOpen, characterRole]);
+  const {
+    perks: specificPerks,
+    isLoadingPerks,
+    errorPerks,
+  } = useCharacterPerks({
+    characterRole,
+    characterCode: selectedCharacter?.code,
+    enabled: isModalOpen && !!selectedCharacter,
+  });
 
   const handlePortraitClick = (character: CharacterProfileData) => {
-    setIsModalOpen(true);
-    setSelectedCharacter(character);
+    openCharacterModal(character);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedCharacter(null);
-    setSpecificPerks([]);
-  };
-
-  const renderPerks = (perks: Perk[]) => {
-    if (isLoadingPerks)
-      return <p className="text-sm text-gray-600 my-4">Loading perks...</p>;
-    if (errorPerks)
-      return <p className="text-sm text-red-500 my-4">{errorPerks}</p>;
-    if (!perks || perks.length === 0) {
-      return <p className="text-sm text-gray-600">No perks listed</p>;
-    }
-    return (
-      <>
-        <h4 className="text-lg font-semibold mt-3 mb-1 text-gray-800">
-          Perks:
-        </h4>
-        <ul className="space-y-3">
-          {perks.map((perk, index) => (
-            <li
-              key={perk.name || `perk-${index}`}
-              className="p-2 border rounded-md shadow-sm"
-            >
-              <div className="flex items-center mb-1">
-                {perk.icon && (
-                  <img
-                    src={perk.icon}
-                    alt={perk.name}
-                    className="w-10 h-10 mr-3 border object-contain"
-                  />
-                )}
-                <strong className="text-md text-gray-700">{perk.name}</strong>
-              </div>
-              <p className="text-xs text-gray-600">{perk.description}</p>
-            </li>
-          ))}
-        </ul>
-      </>
-    );
-  };
   return (
     <>
       <PortraitCharacterList
@@ -120,81 +47,96 @@ export default function DisplayCharacterData({
       />
 
       {isModalOpen && selectedCharacter && (
-        <div className="absolute inset-0 bg-gray-600/50 z-40 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full text-center">
-            <h2 className="text-2xl font-bold mb-4">
-              {selectedCharacter.name}
-            </h2>
-          </div>
-
-          <div className="space-y-2 mb-4">
-            <p>
-              <span className="font-semibold text-gray-700">Overview:</span>
-              <span>{selectedCharacter.overview}</span>
-            </p>
-
-            <p>
-              <span className="font-semibold text-gray-700">Backstory:</span>
-              <span>{selectedCharacter.backstory}</span>
-            </p>
-          </div>
-
-          {characterRole === "killer" &&
-            (selectedCharacter as KillerApiData).role === "killer" && (
-              <div>
-                <h3>killer details</h3>
-
-                {(selectedCharacter as KillerApiData).fullname && (
-                  <p>
-                    Full name: {(selectedCharacter as KillerApiData).fullname}
-                  </p>
-                )}
-
-                <p>
-                  Difficulty: {(selectedCharacter as KillerApiData).difficulty}
-                </p>
-
-                <p>
-                  Move speed: {(selectedCharacter as KillerApiData).moveSpeed}
-                </p>
-
-                <p>
-                  Terror radius:
-                  {(selectedCharacter as KillerApiData).terrorRadius}
-                </p>
-
-                {(selectedCharacter as KillerApiData).power.name && (
-                  <p>
-                    Power: {(selectedCharacter as KillerApiData).power.name}
-                  </p>
-                )}
-
-                {(selectedCharacter as KillerApiData).power.description && (
-                  <p>
-                    Description:
-                    {(selectedCharacter as KillerApiData).power.description}
-                  </p>
-                )}
-              </div>
-            )}
-
-          {characterRole === "survivor" &&
-            (selectedCharacter as SurvivorApiData).role === "survivor" && (
-              <div>
-                <h3>Survivor details</h3>
-                <p>Gender: {(selectedCharacter as SurvivorApiData).gender}</p>
-                <p>Dlc: {(selectedCharacter as SurvivorApiData).dlc}</p>
-              </div>
-            )}
-
-          {renderPerks(specificPerks)}
-
-          <button
-            onClick={handleCloseModal}
-            className="mt-6 w-full px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition-colors"
+        <div className="fixed -inset-1 bg-gradient-to-b from-black via-red-900 to-red bg-gray-900/75 z-30 flex flex-col items-center justify-center p-4">
+          <div
+            className="relative bg-gray-800 p-6 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
           >
-            Cerrar
-          </button>
+            <button
+              onClick={closeCharacterModal}
+              className="absolute top-3 right-3 text-white bg-red-700 hover:bg-red-800 rounded-full p-1.5 leading-none z-50 text-xs"
+              aria-label="Close modal"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <div className="mb-4">
+              <h2 className="text-3xl text-center text-white font-extrabold">
+                {selectedCharacter.name}
+              </h2>
+            </div>
+            <div className="overflow-y-auto text-amber-50 pr-2">
+              {" "}
+              <h3 className="text-2xl font-bold">Overview</h3>
+              <p className="mb-3">{selectedCharacter.overview}</p>
+              <h3 className="border-t border-gray-700 pt-3 mt-3 font-bold text-2xl">
+                Backstory
+              </h3>
+              <p className="mb-3">{selectedCharacter.backstory}</p>
+              {characterRole === "killer" &&
+                "fullName" in selectedCharacter && (
+                  <div className="border-t border-gray-700 pt-3 mt-3">
+                    <h3 className="text-2xl font-bold mb-2">Killer Details</h3>
+                    <p>
+                      <span className="font-bold">Full name: </span>
+                      {(selectedCharacter as KillerApiData).fullName}
+                    </p>
+                    <p>
+                      <span className="font-bold">Nationality: </span>
+                      {(selectedCharacter as KillerApiData).nationality}
+                    </p>
+                    <p>
+                      <span className="font-bold">Gender: </span>
+                      {(selectedCharacter as KillerApiData).gender}
+                    </p>
+                    <p>
+                      <span className="font-bold">Difficulty: </span>
+                      {(selectedCharacter as KillerApiData).difficulty}
+                    </p>
+                    <p>
+                      <span className="font-bold">Move speed: </span>
+                      {(selectedCharacter as KillerApiData).moveSpeed}
+                    </p>
+                    <p>
+                      <span className="font-bold">Terror radius: </span>
+                      {(selectedCharacter as KillerApiData).terrorRadius}
+                    </p>
+                  </div>
+                )}
+              {characterRole === "survivor" && "dlc" in selectedCharacter && (
+                <div className="border-t border-gray-700 pt-3 mt-3">
+                  <h3 className="text-2xl font-bold mb-2">Survivor Details</h3>
+                  <p>
+                    <span className="font-bold">Nationality: </span>
+                    {(selectedCharacter as SurvivorApiData).nationality}
+                  </p>
+                  <p>
+                    <span className="font-bold">DLC: </span>
+                    {(selectedCharacter as SurvivorApiData).dlc}
+                  </p>
+                </div>
+              )}
+              <div className="border-t border-gray-700 pt-3 mt-3">
+                <PerkDisplayList
+                  perks={specificPerks}
+                  isLoading={isLoadingPerks}
+                  error={errorPerks}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </>
