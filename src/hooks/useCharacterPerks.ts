@@ -32,12 +32,10 @@ export function useCharacterPerks({
           } else if (response.data && Array.isArray((response.data as any).data)) {
             perksData = (response.data as any).data;
           } else {
-            console.warn("Formato de perks inesperado en useCharacterPerks:", response.data);
             setError("Formato de perks inesperado.");
           }
           setPerks(perksData);
         } catch (err) {
-          console.error(`Error en useCharacterPerks para ${characterCode}:`, err);
           setError(`Couldn't load perks.`);
           setPerks([]);
         } finally {

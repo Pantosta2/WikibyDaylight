@@ -78,7 +78,6 @@ export default function DisplayCharacterData({
               </h2>
             </div>
             <div className="overflow-y-auto text-amber-50 pr-2">
-              {" "}
               <h3 className="text-2xl font-bold">Overview</h3>
               <p className="mb-3">{selectedCharacter.overview}</p>
               <h3 className="border-t border-gray-700 pt-3 mt-3 font-bold text-2xl">

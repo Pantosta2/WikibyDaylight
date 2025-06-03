@@ -19,7 +19,6 @@ export default function PerkDisplayList({
     return <p className="text-sm text-red-500 my-4">{error}</p>;
   }
 
-  // Asegúrate de que perks no es null o undefined antes de verificar length
   if (!perks || perks.length === 0) {
     return (
       <p className="text-sm text-gray-600">
