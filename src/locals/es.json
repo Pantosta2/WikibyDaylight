@@ -1,0 +1,38 @@
+{
+  "common": {
+    "dbdlogo_alt": "Logotipo de Dead by Daylight"
+  },
+  "nav": {
+    "survivors": {
+      "text": "Supervivientes",
+      "ariaLabel": "Botón para información sobre los supervivientes"
+    },
+    "killers": {
+      "text": "Asesinos",
+      "ariaLabel": "Botón para información sobre los asesinos"
+    },
+    "makeYourOwnBuild": {
+      "text": "Crea tu propia configuración",
+      "ariaLabel": "Sección para probar diferentes configuraciones de ventajas"
+    }
+  },  
+  "notFoundPage": {
+    "message": "¡Esta página no existe!",
+    "homeButtonText": "Llévame a la página principal"
+  },
+  "makeYourBuild": {
+    "header": {
+      "selectInstruction": "Selecciona hasta {{maxPerks}} ventajas ({{selectedCount}}/{{maxPerks}}). Haz clic en una ventaja de la lista para añadirla."
+    },
+    "roles": {
+      "survivorPerks": "Ventajas de Superviviente",
+      "killerPerks": "Ventajas de Asesino"
+    },
+    "search": {
+      "placeholder": "Buscar ventaja por nombre, descripción..."
+    },
+    "alerts": {
+      "perkLimitReached": "Has alcanzado el límite de ventajas."
+    }
+  }
+}

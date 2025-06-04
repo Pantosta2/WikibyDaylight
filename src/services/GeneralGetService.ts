@@ -1,4 +1,3 @@
-// src/services/GeneralGetService.ts
 import type { AxiosResponse } from "axios";
 import axios from "axios";
 import type {
@@ -9,7 +8,7 @@ import type {
   CharacterProfileData
 } from "../Types/GeneralTypes";
 
-const Url = "http://localhost:3000/api"; // Considera hacerlo configurable
+const Url = "http://localhost:3000/api"; 
 
 const getKillers = async (): Promise<AxiosResponse<CharacterListEnvelope>> => {
   return await axios.get<CharacterListEnvelope>(`${Url}/killer`);

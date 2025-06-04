@@ -1,12 +1,10 @@
-// src/components/PerkListDisplay.tsx
-import React from "react";
 import type { Perk } from "../../Types/GeneralTypes";
 import PerkCard from "./PerkCard";
 
 interface PerkListDisplayProps {
   perks: Perk[];
   isLoading: boolean;
-  error: string | null;
+  error?: Error | null;
   title: string;
   onPerkSelect?: (perk: Perk) => void;
   selectedPerkIds?: number[];
@@ -36,7 +34,12 @@ const PerkListDisplay: React.FC<PerkListDisplayProps> = ({
         <p className="text-2xl text-red-400 font-semibold">
           Something went wrong!
         </p>
-        <p className="text-md text-red-300 mt-2">{error}</p>
+        <p className="text-md text-red-500 mt-2">
+          Error:{" "}
+          {error instanceof Error
+            ? error.message
+            : "An unexpected error occurred."}
+        </p>
       </div>
     );
   }

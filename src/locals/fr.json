@@ -1,0 +1,38 @@
+{
+  "common": {
+    "dbdlogo_alt": "Logo de Dead by Daylight"
+  },
+  "nav": {
+    "survivors": {
+      "text": "Survivants",
+      "ariaLabel": "Bouton d'information sur les survivants"
+    },
+    "killers": {
+      "text": "Tueurs",
+      "ariaLabel": "Bouton d'information sur les tueurs"
+    },
+    "makeYourOwnBuild": {
+      "text": "Créez votre propre configuration",
+      "ariaLabel": "Section pour essayer différentes configurations de compétences" 
+    }
+  },  
+  "notFoundPage": {
+    "message": "Cette page n'existe pas !",
+    "homeButtonText": "Retourner à la page d'accueil"
+  },
+  "makeYourBuild": {
+    "header": {
+      "selectInstruction": "Sélectionnez jusqu'à {{maxPerks}} compétences ({{selectedCount}}/{{maxPerks}}). Cliquez sur une compétence dans la liste pour l'ajouter."
+    },
+    "roles": {
+      "survivorPerks": "Compétences de Survivant",
+      "killerPerks": "Compétences de Tueur"
+    },
+    "search": {
+      "placeholder": "Rechercher une compétence par nom, description..."
+    },
+    "alerts": {
+      "perkLimitReached": "Vous avez atteint la limite de compétences."
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "common": {
+    "dbdlogo_alt": "Логотип Dead by Daylight"
+  },
+  "nav": {
+    "survivors": {
+      "text": "Выжившие",
+      "ariaLabel": "Кнопка информации o выживших"
+    },
+    "killers": {
+      "text": "Убийцы",
+      "ariaLabel": "Кнопка информации oб убийцах"
+    },
+    "makeYourOwnBuild": {
+      "text": "Создайте свою собственную сборку",
+      "ariaLabel": "Раздел для создания различных сборок перков"
+    }
+  },
+  "notFoundPage": {
+    "message": "Такой страницы не существует!",
+    "homeButtonText": "Вернуться на главную страницу"
+  },
+  "makeYourBuild": {
+    "header": {
+      "selectInstruction": "Выберите до {{maxPerks}} перков ({{selectedCount}}/{{maxPerks}}). Нажмите на перк в списке, чтобы добавить его."
+    },
+    "roles": {
+      "survivorPerks": "Перки Выжившего",
+      "killerPerks": "Перки Убийцы"
+    },
+    "search": {
+      "placeholder": "Поиск перка по названию, описанию..."
+    },
+    "alerts": {
+      "perkLimitReached": "Вы достигли лимита перков."
+    }
+  }
+}

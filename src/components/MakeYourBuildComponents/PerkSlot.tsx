@@ -1,15 +1,11 @@
-// src/components/PerkSlot.tsx
 import React from "react";
-import type { Perk } from "../../Types/GeneralTypes"; // Ajusta la ruta
+import type { Perk } from "../../Types/GeneralTypes"; 
 
 interface PerkSlotProps {
   perk?: Perk;
   onRemove?: (e: React.MouseEvent, perkId: number) => void;
-  // Estilos para posición absoluta, tamaño y transformación
   style: React.CSSProperties;
-  // Clase para el tamaño del contenedor del ícono (responsivo)
   iconContainerClass: string;
-  // No mostramos el número del slot si está vacío, para el nuevo estilo
 }
 
 const PerkSlot: React.FC<PerkSlotProps> = ({
@@ -20,7 +16,7 @@ const PerkSlot: React.FC<PerkSlotProps> = ({
 }) => {
   const handleRemoveClick = (e: React.MouseEvent) => {
     if (perk && onRemove) {
-      e.stopPropagation(); // Evita que el evento de click se propague si es necesario
+      e.stopPropagation();
       onRemove(e, perk.id);
     }
   };
@@ -29,17 +25,16 @@ const PerkSlot: React.FC<PerkSlotProps> = ({
 
   return (
     <div
-      onClick={handleRemoveClick} // Click en el slot entero para quitar la perk
-      style={style} // Aplica: position, top, left, width, height, transform
+      onClick={handleRemoveClick}
+      style={style}
       className={`
         flex items-center justify-center shadow-xl group transition-all duration-200
-        bg-slate-600 hover:bg-slate-500  // Estilo gris/plata
-        border-2 border-black            // Borde negro
+        bg-slate-600 hover:bg-slate-500  
+        border-2 border-black          
         ${perk && onRemove ? "cursor-pointer" : "cursor-default"}
       `}
       title={title}
     >
-      {/* Div interior para "des-rotar" el contenido */}
       <div
         className={`transform -rotate-45 text-center flex flex-col items-center justify-center w-full h-full`}
       >
@@ -47,15 +42,15 @@ const PerkSlot: React.FC<PerkSlotProps> = ({
           <img
             src={perk.icon}
             alt={perk.name}
-            className={`${iconContainerClass} object-contain`} // Tamaño del ícono dinámico
+            className={`${iconContainerClass} object-contain`}
             onError={(e) => {
               const target = e.currentTarget as HTMLImageElement;
               target.onerror = null;
-              target.src = "https://via.placeholder.com/96?text=Icon"; // Placeholder
+              target.src = "https://via.placeholder.com/96?text=Icon";
             }}
           />
         ) : (
-          <div className="w-full h-full" /> // Slot vacío, solo muestra el fondo y borde
+          <div className="w-full h-full" />
         )}
       </div>
     </div>

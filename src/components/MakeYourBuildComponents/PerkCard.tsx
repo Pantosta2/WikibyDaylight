@@ -1,5 +1,3 @@
-// src/components/PerkCard.tsx
-import React from "react";
 import type { Perk } from "../../Types/GeneralTypes";
 
 interface PerkCardProps {
@@ -27,11 +25,7 @@ const PerkCard: React.FC<PerkCardProps> = ({
       disabled={isSelected || isDisabled}
       title={
         perk.name +
-        (isSelected
-          ? " (Seleccionada)"
-          : isDisabled
-          ? " (Límite alcanzado)"
-          : "")
+        (isSelected ? " (Selected)" : isDisabled ? " (Limit reach)" : "")
       }
       className={`bg-gray-800 text-white border border-gray-700 rounded-lg shadow-xl p-4 m-2 flex flex-col items-center text-center w-full max-w-[260px] sm:w-64 transition-all duration-300 ease-in-out
         ${

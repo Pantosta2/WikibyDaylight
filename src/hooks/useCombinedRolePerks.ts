@@ -1,17 +1,11 @@
 // src/hooks/useCombinedRolePerks.ts
-// ... (código completo del hook useCombinedRolePerks de la respuesta anterior)
-// Es el que hace:
-// 1. Fetch general perks (getCharacterPerks(role, "all"))
-// 2. Fetch characters (getKillers/getSurvivors)
-// 3. Fetch perks for each character (getCharacterPerks(role, character.code))
-// 4. Combina y deduplica (usando perk.id)
 import { useState, useEffect } from "react";
 import {
   getCharacterPerks,
   getKillers,
   getSurvivors,
-} from "../services/GeneralGetService";
-import type { Perk, CharacterProfileData } from "../Types/GeneralTypes";
+} from "../services/GeneralGetService"; // Asegúrate que la ruta sea correcta
+import type { Perk, CharacterProfileData } from "../Types/GeneralTypes"; // Asegúrate que la ruta sea correcta
 import axios from 'axios';
 
 type UseCombinedRolePerksProps = {
@@ -22,7 +16,7 @@ type UseCombinedRolePerksProps = {
 export function useCombinedRolePerks({ role, enabled }: UseCombinedRolePerksProps) {
   const [perks, setPerks] = useState<Perk[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     if (!enabled) {
@@ -39,20 +33,24 @@ export function useCombinedRolePerks({ role, enabled }: UseCombinedRolePerksProp
 
       try {
         const generalPerksResponse = await getCharacterPerks(role, "all");
+
         let generalPerksData: Perk[] = [];
+
         if (Array.isArray(generalPerksResponse.data)) {
           generalPerksData = generalPerksResponse.data;
         } else if (generalPerksResponse.data && Array.isArray((generalPerksResponse.data as any).data)) {
           generalPerksData = (generalPerksResponse.data as any).data;
         }
+
         if (generalPerksData && generalPerksData.length > 0) {
           combinedPerksList.push(...generalPerksData.filter(p => p && typeof p.id === 'number'));
         }
 
         let characters: CharacterProfileData[] = [];
+
         if (role === "killer") {
           const killersResponse = await getKillers();
-          characters = killersResponse.data.data || [];
+          characters = killersResponse.data.data || []; 
         } else {
           const survivorsResponse = await getSurvivors();
           characters = survivorsResponse.data.data || [];
@@ -62,6 +60,7 @@ export function useCombinedRolePerks({ role, enabled }: UseCombinedRolePerksProp
           getCharacterPerks(role, character.code)
             .then(response => {
               let charPerksData: Perk[] = [];
+              
               if (Array.isArray(response.data)) {
                 charPerksData = response.data;
               } else if (response.data && Array.isArray((response.data as any).data)) {
@@ -71,7 +70,7 @@ export function useCombinedRolePerks({ role, enabled }: UseCombinedRolePerksProp
             })
             .catch(charPerkError => {
               console.warn(`Error obteniendo perks para ${character.name} (${character.code}):`, charPerkError);
-              return [];
+              return []; 
             })
         );
 
@@ -84,7 +83,7 @@ export function useCombinedRolePerks({ role, enabled }: UseCombinedRolePerksProp
 
         const uniquePerksMap = new Map<number, Perk>();
         combinedPerksList.forEach(perk => {
-          if (perk && typeof perk.id === 'number') {
+          if (perk && typeof perk.id === 'number') { 
             uniquePerksMap.set(perk.id, perk);
           }
         });
@@ -97,9 +96,11 @@ export function useCombinedRolePerks({ role, enabled }: UseCombinedRolePerksProp
             if (err.response) errorMessage += ` Estado: ${err.response.status}.`;
         } else if (err instanceof Error) {
             errorMessage += ` Error: ${err.message}.`;
+        } else {
+            errorMessage += ` Error desconocido: ${String(err)}.`;
         }
-        setError(errorMessage);
-        setPerks([]);
+        setError(new Error(errorMessage));
+        setPerks([]); 
       } finally {
         setIsLoading(false);
       }
@@ -111,6 +112,6 @@ export function useCombinedRolePerks({ role, enabled }: UseCombinedRolePerksProp
   return {
     allPerks: perks,
     isLoadingAllPerks: isLoading,
-    errorAllPerks: error,
+    errorAllPerks: error, 
   };
 }
