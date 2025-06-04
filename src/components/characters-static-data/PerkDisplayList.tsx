@@ -1,4 +1,4 @@
-import type { Perk } from "../services/GeneralGetService";
+import type { Perk } from "../../services/GeneralGetService";
 
 type PerkDisplayListProps = {
   perks: Perk[];

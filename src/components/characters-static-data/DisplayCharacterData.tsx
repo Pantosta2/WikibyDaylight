@@ -1,13 +1,13 @@
 import type { AxiosResponse } from "axios";
 import PortraitCharacterList from "./PortraitCharacterList";
-import { useModal } from "../hooks/useModal";
-import { useCharacterPerks } from "../hooks/useCharacterPerks";
+import { useModal } from "../../hooks/useModal";
+import { useCharacterPerks } from "../../hooks/useCharacterPerks";
 import PerkDisplayList from "./PerkDisplayList";
 import type {
   CharacterProfileData,
   CharacterListEnvelope,
-} from "../services/GeneralGetService";
-import type { KillerApiData, SurvivorApiData } from "../Types/GeneralTypes";
+} from "../../services/GeneralGetService";
+import type { KillerApiData, SurvivorApiData } from "../../Types/GeneralTypes";
 
 type DisplayCharacterDataProps = {
   fetchFunction: () => Promise<AxiosResponse<CharacterListEnvelope>>;

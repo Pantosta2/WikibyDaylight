@@ -1,13 +1,13 @@
 // src/components/PerkListDisplay.tsx
 import React from "react";
-import type { Perk } from "../Types/GeneralTypes";
+import type { Perk } from "../../Types/GeneralTypes";
 import PerkCard from "./PerkCard";
 
 interface PerkListDisplayProps {
   perks: Perk[];
   isLoading: boolean;
   error: string | null;
-  title: string; // Aunque el título principal estará fuera, esto puede ser útil para subsecciones
+  title: string;
   onPerkSelect?: (perk: Perk) => void;
   selectedPerkIds?: number[];
   maxPerksReached?: boolean;
@@ -25,7 +25,7 @@ const PerkListDisplay: React.FC<PerkListDisplayProps> = ({
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500 mx-auto"></div>
-        <p className="text-xl text-gray-300 mt-4">Cargando perks...</p>
+        <p className="text-xl text-gray-300 mt-4">Loading perks...</p>
       </div>
     );
   }
@@ -34,7 +34,7 @@ const PerkListDisplay: React.FC<PerkListDisplayProps> = ({
     return (
       <div className="text-center py-12 bg-red-900/30 border border-red-700 p-6 rounded-lg mx-auto max-w-lg">
         <p className="text-2xl text-red-400 font-semibold">
-          ¡Ups! Algo salió mal
+          Something went wrong!
         </p>
         <p className="text-md text-red-300 mt-2">{error}</p>
       </div>
@@ -44,7 +44,7 @@ const PerkListDisplay: React.FC<PerkListDisplayProps> = ({
   if (perks.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-xl text-gray-400">No se encontraron perks.</p>
+        <p className="text-xl text-gray-400">Not perks found</p>
       </div>
     );
   }
@@ -58,7 +58,7 @@ const PerkListDisplay: React.FC<PerkListDisplayProps> = ({
   });
 
   return (
-    <div className="flex flex-wrap justify-center items-stretch gap-x-4 gap-y-6">
+    <div className="flex flex-wrap justify-center items-stretch gap-x-5 gap-y-6 absolute">
       {sortedPerks.map((perk) => (
         <PerkCard
           key={perk.id}

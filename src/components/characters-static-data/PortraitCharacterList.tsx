@@ -2,8 +2,8 @@ import type { AxiosResponse } from "axios";
 import type {
   CharacterProfileData,
   CharacterListEnvelope,
-} from "../services/GeneralGetService";
-import { useCharacterList } from "../hooks/useCharacterList";
+} from "../../services/GeneralGetService";
+import { useCharacterList } from "../../hooks/useCharacterList";
 
 type PortraitListProps = {
   fetchFunction: () => Promise<AxiosResponse<CharacterListEnvelope>>;

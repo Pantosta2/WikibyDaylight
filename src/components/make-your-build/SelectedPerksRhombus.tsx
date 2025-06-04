@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import type { Perk } from "../Types/GeneralTypes";
+import type { Perk } from "../../Types/GeneralTypes";
 import PerkSlot from "./PerkSlot";
 
 const slotSizeDefinitions = {

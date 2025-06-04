@@ -1,6 +1,6 @@
 import { GeneralNav } from "../layouts/GeneralNav";
 import { DefinedImages } from "../assets/DefinedImages";
-import DisplayCharacterData from "../components/DisplayCharacterData";
+import DisplayCharacterData from "../components/characters-static-data/DisplayCharacterData";
 import { getKillers } from "../services/GeneralGetService";
 
 export default function KillersPage() {

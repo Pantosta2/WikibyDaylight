@@ -1,6 +1,6 @@
 // src/components/PerkSlot.tsx
 import React from "react";
-import type { Perk } from "../Types/GeneralTypes"; // Ajusta la ruta
+import type { Perk } from "../../Types/GeneralTypes"; // Ajusta la ruta
 
 interface PerkSlotProps {
   perk?: Perk;

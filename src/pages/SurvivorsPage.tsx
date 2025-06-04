@@ -1,7 +1,7 @@
 import { GeneralNav } from "../layouts/GeneralNav";
 import { DefinedImages } from "../assets/DefinedImages";
 import { getSurvivors } from "../services/GeneralGetService";
-import DisplayCharacterData from "../components/DisplayCharacterData";
+import DisplayCharacterData from "../components/characters-static-data/DisplayCharacterData";
 
 export default function SurvivorsPage() {
   return (
